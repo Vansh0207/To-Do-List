@@ -53,7 +53,7 @@ Before you begin, ensure you have the following installed:
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/your-username/my-full-stack-todo-app.git](https://github.com/your-username/my-full-stack-todo-app.git) # Replace with your actual repo URL
+    git clone [https://github.com/Vansh0207/my-full-stack-todo-app.git](https://github.com/Vansh0207/my-full-stack-todo-app.git) # Replace with your actual repo URL
     cd my-full-stack-todo-app
     ```
 
