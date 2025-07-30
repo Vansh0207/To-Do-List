@@ -1,0 +1,486 @@
+/* general styling */
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f4f4;
+    margin:0;
+    padding:0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+header{
+    background-color: #333;
+    color:#fff;
+    padding: 1rem 0;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+main{
+    background-color: #fff;
+    padding: 2rem;
+    margin: 2rem auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 600px;
+}
+
+/* section headings */
+h2{
+    color:#333;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    text-align: center;
+}
+
+.add_item{
+    display: flex;
+    gap: 10px;
+    margin-bottom: 2rem;
+}
+
+/* input id */
+#item-input{
+    flex-grow: 1;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.add_item button{
+    padding: 0.8rem 1.5rem;
+    background-color: #241e1c ;
+    border: none;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.add_item button:hover{
+    background-color: #756c69;
+}
+
+/* item list styling*/
+
+ul{
+    list-style: none;
+    padding: 0rem;
+}
+li{
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+li:last-child {
+    margin-bottom: 0; /* No margin after the last item */
+}
+
+
+li button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-left: 10px; /* Space between buttons */
+    transition: background-color 0.3s ease;
+}
+
+.edit-btn{
+    background-color: #007bff;
+    color: #fff;
+}
+
+.edit-btn:hover{
+    background-color: #0056b3;
+}
+
+.delete-btn{
+    background-color: #ef1a1a;
+    color: #fff;
+}
+
+.delete-btn:hover{
+    background-color: #d70505;
+}
+
+.feedback{
+    text-align: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    min-height: 40px; /* Reserve space to prevent layout shifting */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.message {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+    width: fit-content;
+    margin: 0.5rem auto; /* Center messages */
+    animation: fadeInOut 0.5s forwards; /* Animation for messages */
+}
+.message.success {
+    background-color: #28a745; /* Green for success */
+}
+.message.error {
+    background-color: #dc3545; /* Red for error */
+}
+
+#loading-indicator{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    color:#555
+}
+
+.spinner{
+    border: 4px solid rgba(0,0,0,0.1);
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    width:24px;
+    height:24px;
+    animation: spin 1s linear infinite;
+}
+
+.hidden{
+    display: none !important;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-10px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+}
+
+/* Styling for new input types in the form */
+.add_item textarea,
+.add_item input[type="number"] {
+    flex-grow: 1; /* Allows them to take up available space */
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 10px; /* Space between inputs */
+    width: 100%; /* Ensure they take full width in a column layout */
+    box-sizing: border-box; /* Include padding/border in the element's total width/height */
+}
+
+/* Specific styling for the checkbox container */
+.form-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between checkbox and label */
+    margin-bottom: 10px; /* Space before the submit button */
+}
+
+.form-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.form-checkbox label {
+    font-size: 1rem;
+    color: #555;
+    cursor: pointer;
+}
+
+/* Adjust button margin for better spacing after new fields */
+.add_item button {
+    margin-top: 5px; /* Adjust if needed for better vertical alignment */
+}
+
+/* Responsive Adjustments for new fields */
+@media (max-width: 480px) {
+    .add_item textarea,
+    .add_item input[type="number"] {
+        margin-bottom: 10px; /* Maintain spacing */
+    }
+    .form-checkbox {
+        width: 100%;
+        justify-content: center; /* Center checkbox on small screens */
+    }
+}
+/* Styling for individual task items in the list */
+li.task-item {
+    display: flex;
+    align-items: center; /* Vertically align items */
+    justify-content: space-between; /* Space out content and buttons */
+    padding: 0.8rem 1rem; /* Slightly adjust padding */
+    position: relative; /* For potential future absolute positioning */
+}
+
+/* Style for the container of task name, description, time */
+.task-details {
+    flex-grow: 1; /* Allows it to take up most available space */
+    margin-right: 15px; /* Space between details and buttons/checkbox */
+    display: flex;
+    flex-direction: column; /* Stack name, description, time vertically */
+}
+
+.task-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    word-break: break-word; /* Break long words to prevent overflow */
+}
+
+.task-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    word-break: break-word;
+}
+
+.task-time {
+    font-size: 0.85rem;
+    color: #888;
+    background-color: #e0e0e0;
+    padding: 3px 8px;
+    border-radius: 12px;
+    width: fit-content;
+    margin-top: 5px; /* Space from description */
+}
+
+/* Styling for the Completed Task state */
+li.completed-task {
+    background-color: #e6ffe6; /* Light green background */
+    border-color: #a3e6a3; /* Green border */
+}
+
+li.completed-task .task-name,
+li.completed-task .task-description {
+    text-decoration: line-through; /* Strikethrough for completed tasks */
+    color: #999; /* Faded color */
+}
+
+/* Checkbox styling within the list item */
+.task-completed-checkbox {
+    margin-right: 15px; /* Space between checkbox and task details */
+    /* Add custom checkbox styling here if desired, e.g., using appearance: none */
+}
+
+/* Button Group Styling */
+.button-group {
+    display: flex;
+    gap: 8px; /* Space between edit and delete buttons */
+    flex-shrink: 0; /* Prevent button group from shrinking */
+}
+
+/* Responsive adjustments for list items */
+@media (max-width: 480px) {
+    li.task-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .task-details {
+        width: 100%; /* Take full width */
+        margin-right: 0;
+        margin-bottom: 10px; /* Space before buttons/checkbox */
+    }
+    .task-completed-checkbox {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    .button-group {
+        width: 100%; /* Make buttons take full width */
+        justify-content: space-around; /* Spread buttons out */
+    }
+    li button {
+        width: 48%; /* Adjust width for two buttons side-by-side */
+        margin-left: 0; /* Remove left margin from previous rule */
+    }
+}
+
+/* Authentication Section Styling */
+.auth-section {
+    width: 90%;
+    max-width: 400px; /* Make auth forms a bit narrower */
+    background-color: #fff;
+    padding: 2rem;
+    margin: 2rem auto; /* Center the auth section */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex; /* To manage showing one form at a time */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-container {
+    width: 100%; /* Take full width of its parent */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px; /* Space between form fields */
+    margin-top: 1.5rem;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%; /* Ensure inputs take full width */
+    box-sizing: border-box; /* Include padding/border in the element's total width/height */
+}
+
+.auth-form button {
+    padding: 0.8rem 1.5rem;
+    background-color: #007bff; /* Blue for auth buttons */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Full width button */
+}
+
+.auth-form button:hover {
+    background-color: #0056b3;
+}
+
+.auth-form p {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.auth-form a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.auth-form a:hover {
+    text-decoration: underline;
+}
+
+/* Specific styling for the main CRUD section when shown */
+.crud-section {
+    display: flex; /* Change from 'block' or default for main content */
+    flex-direction: column; /* Stack sections vertically */
+    align-items: center; /* Center content horizontally */
+    width: 90%;
+    max-width: 600px; /* Same max-width as main for consistency */
+    background-color: #fff; /* Match main styling */
+    padding: 2rem;
+    margin: 2rem auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Override the general 'main' styling when crud-section is visible directly */
+/* This will ensure the internal sections have proper margins */
+.crud-section section {
+    width: 100%; /* Ensure internal sections fill the crud-section */
+    padding: 0; /* Remove padding if added by other rules */
+    margin: 0; /* Remove margins to allow inner sections to control spacing */
+}
+
+/* Ensure existing add_item form still works within crud-section */
+.crud-section .add_item {
+    margin-top: 1.5rem; /* Add some top margin to add item form */
+}
+
+
+/* Add a logout button to the header (will be added via JS later) */
+#logout-btn {
+    background-color: #dc3545; /* Red for logout */
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    float: right; /* Float it to the right of the header */
+    margin-right: 2rem; /* Add some space from the edge */
+    transition: background-color 0.3s ease;
+}
+
+#logout-btn:hover {
+    background-color: #c82333;
+}
+
+/* General hidden utility class - already defined, but good to ensure it's here */
+.hidden {
+    display: none !important;
+}
+/* Ensure specific sections are truly hidden */
+.auth-section.hidden,
+.crud-section.hidden {
+    display: none !important;
+}
+
+/* Responsive Adjustments for authentication forms */
+@media (max-width: 480px) {
+    .auth-section {
+        margin: 1rem;
+        padding: 1.5rem;
+        width: calc(100% - 2rem); /* Full width minus margins */
+    }
+    .crud-section {
+        margin: 1rem;
+        padding: 1.5rem;
+        width: calc(100% - 2rem);
+    }
+}
+
+@media(max-width:480px){
+    .add_item{
+        flex-direction: column;
+    }
+    .add_item button{
+        width:100%;
+        margin-left: 0;
+        margin-top:10px;
+    }
+    li{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    li button{
+        width: 100%;
+        margin-top: 10px;;
+    }
+}
+
