@@ -68,11 +68,10 @@ Before you begin, ensure you have the following installed:
        ```
     c. Create a `.env` file in the `backend` directory with your MongoDB Atlas connection string and a JWT secret:
        ```
-       PORT=5000
-       MONGO_URI=mongodb+srv://YOUR_ATLAS_USERNAME:YOUR_ATLAS_PASSWORD@cluster0.pyjnwkt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-       JWT_SECRET=YOUR_VERY_STRONG_RANDOM_SECRET_KEY
+       PORT=
+       MONGO_URI=
+       JWT_SECRET=
        ```
-       *Replace `YOUR_ATLAS_USERNAME`, `YOUR_ATLAS_PASSWORD`, and `YOUR_VERY_STRONG_RANDOM_SECRET_KEY` with your actual credentials.*
 
     d. Start the backend server:
        ```bash
