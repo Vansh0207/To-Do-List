@@ -1,4 +1,4 @@
-# My Full-Stack To-Do List Application
+# Full-Stack To-Do List Application
 
 ## Overview
 This is a simple yet complete full-stack To-Do List application built with a JavaScript-centric stack. It allows users to register, log in, and manage their personal To-Do tasks, including task name, description, estimated time, and completion status.
