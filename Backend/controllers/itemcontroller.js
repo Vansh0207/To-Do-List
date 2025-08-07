@@ -1,105 +1,131 @@
 // backend/controllers/itemController.js
 const Item = require("../models/Item"); // Import the Item model
+const asyncHandler = require("express-async-handler"); // Import express-async-handler for error handling
 
-// @desc    Get all items
+// @desc    Get all items for the logged-in user
 // @route   GET /api/items
-// @access  Public
-const getItems = async (req, res) => {
-  try {
-    const items = await Item.find(); // Find all documents
-    res.status(200).json(items);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+// @access  Private
+const getItems = asyncHandler(async (req, res) => {
+  // This is the CRITICAL line that filters tasks by user ID
+  // req.user._id is populated by the 'protect' middleware
+  const items = await Item.find({ user: req.user._id });
+  res.status(200).json(items);
+});
 
-// @desc    Get single item
+// @desc    Get single item for the logged-in user
 // @route   GET /api/items/:id
-// @access  Public
-const getItemById = async (req, res) => {
-  try {
-    const item = await Item.findById(req.params.id);
-    if (!item) {
-      return res.status(404).json({ message: "Item not found" });
-    }
-    res.status(200).json(item);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+// @access  Private
+const getItemById = asyncHandler(async (req, res) => {
+  const item = await Item.findById(req.params.id);
 
-// @desc    Create new item (To-Do Task)
+  if (!item) {
+    res.status(404);
+    throw new Error("Item not found");
+  }
+
+  // This check ensures the found item belongs to the logged-in user
+  if (item.user.toString() !== req.user._id.toString()) {
+    res.status(401); // Unauthorized
+    throw new Error("Not authorized to view this item");
+  }
+
+  res.status(200).json(item);
+});
+
+// @desc    Create new item (To-Do Task) for the logged-in user
 // @route   POST /api/items
-// @access  Public
-const createItem = async (req, res) => {
-  try {
-    // Basic server-side validation for required fields
-    if (!req.body.name) {
-      return res
-        .status(400)
-        .json({ message: "Please add a name for the task" });
-    }
-    if (!req.body.estimatedTime) {
-      return res
-        .status(400)
-        .json({ message: "Please add an estimated time in minutes" });
-    }
-
-    // Create a new item document, including the new fields
-    const item = await Item.create({
-      name: req.body.name,
-      description: req.body.description || "", // Use default from schema if not provided
-      estimatedTime: req.body.estimatedTime,
-      completed: req.body.completed || false, // Use default from schema if not provided
-    });
-    res.status(201).json(item);
-  } catch (error) {
-    // Handle Mongoose validation errors (e.g., 'name' unique, min value for estimatedTime)
-    res.status(400).json({ message: error.message });
+// @access  Private
+const createItem = asyncHandler(async (req, res) => {
+  // Basic server-side validation for required fields
+  if (!req.body.name) {
+    res.status(400);
+    throw new Error("Please add a name for the task");
   }
-};
+  if (!req.body.estimatedTime) {
+    res.status(400);
+    throw new new Error("Please add an estimated time in minutes")();
+  }
 
-// @desc    Update an item (To-Do Task)
+  // Check if a task with this name already exists for THIS USER
+  const existingItem = await Item.findOne({
+    name: req.body.name,
+    user: req.user._id,
+  });
+  if (existingItem) {
+    res.status(400);
+    throw new Error("You already have a task with this name.");
+  }
+
+  // Create a new item document, linking it to the logged-in user
+  const item = await Item.create({
+    user: req.user._id, // This line links the new task to the user
+    name: req.body.name,
+    description: req.body.description || "",
+    estimatedTime: req.body.estimatedTime,
+    completed: req.body.completed || false,
+  });
+  res.status(201).json(item);
+});
+
+// @desc    Update an item (To-Do Task) for the logged-in user
 // @route   PUT /api/items/:id
-// @access  Public
-const updateItem = async (req, res) => {
-  try {
-    const item = await Item.findById(req.params.id);
-    if (!item) {
-      return res.status(404).json({ message: "Item not found" });
-    }
+// @access  Private
+const updateItem = asyncHandler(async (req, res) => {
+  const item = await Item.findById(req.params.id);
 
-    // Find and update the item using req.body directly.
-    // Mongoose will automatically apply schema validators and defaults
-    // for fields present in req.body.
-    const updatedItem = await Item.findByIdAndUpdate(req.params.id, req.body, {
-      new: true, // Return the updated document
-      runValidators: true, // Run schema validators on update
+  if (!item) {
+    res.status(404);
+    throw new Error("Item not found");
+  }
+
+  // This check ensures the item to be updated belongs to the logged-in user
+  if (item.user.toString() !== req.user._id.toString()) {
+    res.status(401); // Unauthorized
+    throw new Error("Not authorized to update this item");
+  }
+
+  // Check for duplicate name if name is being updated
+  if (req.body.name && req.body.name !== item.name) {
+    const existingItem = await Item.findOne({
+      name: req.body.name,
+      user: req.user._id,
     });
-    res.status(200).json(updatedItem);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-// @desc    Delete an item
-// @route   DELETE /api/items/:id
-// @access  Public
-const deleteItem = async (req, res) => {
-  try {
-    const item = await Item.findById(req.params.id);
-    if (!item) {
-      return res.status(404).json({ message: "Item not found" });
+    if (existingItem && existingItem._id.toString() !== req.params.id) {
+      res.status(400);
+      throw new Error("You already have another task with this name.");
     }
-
-    await Item.deleteOne({ _id: req.params.id });
-    res
-      .status(200)
-      .json({ id: req.params.id, message: "Item removed successfully" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
-};
+
+  // Find and update the item.
+  const updatedItem = await Item.findByIdAndUpdate(req.params.id, req.body, {
+    new: true, // Return the updated document
+    runValidators: true, // Run schema validators on update
+  });
+  res.status(200).json(updatedItem);
+});
+
+// @desc    Delete an item for the logged-in user
+// @route   DELETE /api/items/:id
+// @access  Private
+const deleteItem = asyncHandler(async (req, res) => {
+  const item = await Item.findById(req.params.id);
+
+  if (!item) {
+    res.status(404);
+    throw new Error("Item not found");
+  }
+
+  // This check ensures the item to be deleted belongs to the logged-in user
+  if (item.user.toString() !== req.user._id.toString()) {
+    res.status(401); // Unauthorized
+    throw new Error("Not authorized to delete this item");
+  }
+
+  await Item.deleteOne({ _id: req.params.id });
+  res
+    .status(200)
+    .json({ id: req.params.id, message: "Item removed successfully" });
+});
 
 module.exports = {
   getItems,

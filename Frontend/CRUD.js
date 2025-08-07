@@ -321,6 +321,14 @@ async function fetchItems() {
 function renderItems() {
   ul.innerHTML = "";
 
+  // CRITICAL FIX: Ensure 'items' is a valid array before proceeding
+  if (!Array.isArray(items) || items.length === 0) {
+    const emptyLi = document.createElement("li");
+    emptyLi.textContent = "No tasks yet. Add one!";
+    ul.appendChild(emptyLi);
+    return;
+  }
+
   if (items.length === 0) {
     const emptyLi = document.createElement("li");
     emptyLi.textContent = "No tasks yet. Add one!";
