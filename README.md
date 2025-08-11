@@ -23,7 +23,7 @@ Use the checkbox to mark it as complete.
 
 Use the edit or delete buttons to update your list.
 
-🛠️ Tech Stack
+🛠️ Tech Stack:
 HTML5 – Structure
 
 CSS3 – Styling
